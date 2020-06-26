@@ -1,0 +1,9 @@
+---
+- host: all
+  gather_info: false
+  
+  tasks:
+  
+  authorized_key:
+    user: <user>
+    key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
