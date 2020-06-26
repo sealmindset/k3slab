@@ -4,6 +4,7 @@
   
   tasks:
   
-  authorized_key:
-    user: <user>
-    key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+- name: Deploy SSH Key
+     authorized_key: user=devops
+                     key="{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+                     state=present
