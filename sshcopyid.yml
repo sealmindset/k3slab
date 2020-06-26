@@ -1,10 +1,11 @@
+
 ---
-- host: all
-  gather_info: false
-  
-  tasks:
-  
-- name: Deploy SSH Key
+ - hosts: all
+   gather_facts: no
+ 
+   tasks:
+ 
+   - name: Enable Passwordless Authentication
      authorized_key: user=devops
                      key="{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
                      state=present
