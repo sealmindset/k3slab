@@ -1,0 +1,47 @@
+---
+- hosts: k3snodes
+  tasks:
+    - name: hostname 
+      debug: var=ansible_hostname
+
+    - name: System Info 
+      vars:
+       msg: |
+        Hostname: {{ ansible_hostname }}
+        IPv4 Address: {{ ansible_default_ipv4.address }}
+        IPv4 Subnet: {{ ansible_default_ipv4.netmask }}
+        IPv4 Interface: {{ ansible_default_ipv4.interface }}
+        IPv4 Broadcast: {{ ansible_default_ipv4.broadcast }}
+        IPv4 Gateway: {{ ansible_default_ipv4.gateway }}
+        IPv4 MAC: {{ ansible_default_ipv4.macaddress }}
+        Date: {{ ansible_date_time.date }}
+        Timezone: {{ ansible_date_time.tz }}
+        CPU: {{ ansible_processor }}
+        CPU COre: {{ ansible_processor_cores }}
+        RAM: {{ ansible_memtotal_mb }}
+        SWAP: {{ ansible_memory_mb.swap.total }}
+        Distribution: {{ ansible_distribution }}
+        Release: {{ ansible_distribution_release }}
+        Distribution Version: {{ ansible_distribution_version }}
+        Kernel: {{ ansible_kernel }}
+        Architecture: {{ ansible_architecture }}
+        Userspace Bits: {{ ansible_userspace_bits }}
+        Virtual: {{ ansible_virtualization_type }}
+        OS Family: {{ ansible_os_family }}
+        System: {{ ansible_system }}
+        Vendor: {{ ansible_system_vendor }}
+        SELinux: {{ ansible_selinux }}
+        Machine: {{ ansible_machine }}
+        BIOS Date: {{ ansible_bios_date }}
+        BIOS Version: {{ ansible_bios_version }}
+        Uptime: {{ ansible_uptime_seconds }}
+        User ID: {{ ansible_user_id }}
+        User UID: {{ ansible_user_uid }}
+        User GID: {{ ansible_user_gid }}
+        User Dir: {{ ansible_user_dir }}
+        Shell: {{ ansible_user_shell }}
+        Pub Key: {{ ansible_ssh_host_key_rsa_public }}
+      debug:
+       msg: "{{ msg.split('\n') }}"
+
+

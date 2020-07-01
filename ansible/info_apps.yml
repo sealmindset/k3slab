@@ -1,0 +1,11 @@
+---
+- hosts: k3snodes
+  any_errors_fatal: false 
+  tasks:
+    - name: Installed Packages
+      package_facts:
+        manager: auto
+
+    - name: Debug if package is present
+      debug:
+        msg: '{{ ansible_facts.packages }}' 

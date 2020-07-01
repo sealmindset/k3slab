@@ -1,26 +1,13 @@
 ---
  - hosts: all
-   vars:
-     - provision_password: 'P@s5w0rd'
    gather_facts: no
-   remote_user: root
  
    tasks:
  
-   - name: Add a new user named provision
-     user:
-          name=provision
-          password={{ provision_password }}
- 
-   - name: Add provision user to the sudoers
+   - name: Add ubuntu user to the sudoers
      copy:
-          dest: "/etc/sudoers.d/provision"
-          content: "provision  ALL=(ALL)  NOPASSWD: ALL"
- 
-   - name: Deploy SSH Key
-     authorized_key: user=provision
-                     key="{{ lookup('file', '/home/provision/.ssh/id_rsa.pub') }}"
-                     state=present
+          dest: "/etc/sudoers.d/90-cloud-init-users"
+          content: "ubuntu ALL=(ALL) NOPASSWD: ALL"
  
    - name: Disable Password Authentication
      lineinfile:
@@ -32,11 +19,21 @@
      notify:
        - restart ssh
  
-   - name: Disable Root Login
+   - name: Disable Challenge Response Authentication 
      lineinfile:
            dest=/etc/ssh/sshd_config
-           regexp='^PermitRootLogin'
-           line="PermitRootLogin no"
+           regexp='^ChallengeResponseAuthentication'
+           line='ChallengeResponseAuthentication no'
+           state=present
+           backup=yes
+     notify:
+       - restart ssh
+
+   - name: Disable Use PAM 
+     lineinfile:
+           dest=/etc/ssh/sshd_config
+           regexp='^UsePAM'
+           line='UsePAM no'
            state=present
            backup=yes
      notify:

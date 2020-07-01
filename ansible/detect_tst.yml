@@ -1,0 +1,14 @@
+---
+# Run: ansible-playbook -e { "pkgs": ["foo", "git"] } detect_tst.yml -u ubuntu -b
+#
+- hosts: "{{ localhost | default('k3snodes') }}"
+  any_errors_fatal: false 
+  tasks:
+    - name: Installed Packages
+      package_facts:
+        manager: auto
+
+    - name: Debug if package is present
+      debug:
+        msg: "{{ item }} {{ 'is installed' if item in ansible_facts.packages else 'is not installed' }}" 
+      loop: "{{ pkgs | default([]) }}"

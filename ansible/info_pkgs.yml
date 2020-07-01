@@ -1,0 +1,11 @@
+---
+- hosts: k3snodes
+  any_errors_fatal: false 
+  tasks:
+    - name: Installed Packages
+      shell: dpkg-query -f '${binary:Package}\n' -W
+      register: packages
+
+    - name: Print Packages
+      debug:
+        msg: "{{ packages.stdout_lines }}" 

@@ -1,0 +1,12 @@
+---
+- name: Uses ansible_date_time
+  hosts: k3snodes
+
+  tasks:
+    - name: Ansible fact - ansible_date_time
+      debug:
+        var: ansible_date_time
+
+    - name: Ansible fact - ansible_date_time.iso8601
+      debug:
+        msg: "Timestampt in the ISO8601 format: {{ ansible_date_time.iso8601 }}"
