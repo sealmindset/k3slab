@@ -1,5 +1,6 @@
 ---
-- hosts: localhost
+- hosts: "{{ localhost | default('k3snodes') }}"
+  any_errors_fatal: false 
   tasks:
     - stat:
         path: "{{ id_rsa_file }}"

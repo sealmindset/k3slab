@@ -1,5 +1,6 @@
 ---
-- hosts: k3snodes
+- hosts: "{{ localhost | default('k3snodes') }}"
+  any_errors_fatal: false 
   gather_facts: false
   vars_prompt:
   - name: confirmation
@@ -64,5 +65,3 @@
     - name: print the connectivity test results
       debug:
         var: ssh_connection_test.stdout_lines
-
-

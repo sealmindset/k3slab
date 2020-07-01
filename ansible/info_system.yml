@@ -1,5 +1,6 @@
 ---
-- hosts: k3snodes
+- hosts: "{{ localhost | default('k3snodes') }}"
+  any_errors_fatal: false 
   tasks:
     - name: hostname 
       debug: var=ansible_hostname
