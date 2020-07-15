@@ -1,10 +1,10 @@
---
-- hosts: all 
+---
+- hosts: "{{ var_hosts | default('k3snodes') }}"
   tasks:
     - lineinfile:
         path: /etc/netplan/50-cloud-init.yaml
         state: present
-        regexp: '^(\s){15}addresses[\:] \[192.168.2.5\]'
+        regexp: '^(\s){1:wq5}addresses[\:] \[192.168.2.5\]'
         line: 'addresses: [192.168.5.1,192.168.2.5]'
    command:
      cmd: /usr/sbin/netplan apply

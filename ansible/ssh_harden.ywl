@@ -1,5 +1,5 @@
 ---
-- hosts: "{{ tgt_hosts | default('k3snodes') }}"
+- hosts: "{{ var_hosts | default('k3snodes') }}"
   any_errors_fatal: false 
   gather_facts: false
 

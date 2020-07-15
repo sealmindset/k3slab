@@ -1,5 +1,5 @@
 ---
-- hosts: localhost 
+- hosts: "{{ var_hosts | default('k3snodes') }}"
   gather_facts: false
   tasks:
 

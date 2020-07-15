@@ -1,5 +1,5 @@
 ---
-- hosts: 10.0.1.111 
+- hosts: "{{ var_hosts | default('k3snodes') }}"
   any_errors_fatal: false 
   tasks:
     - name: Install Docker 

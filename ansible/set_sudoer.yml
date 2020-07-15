@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: "{{ var_hosts | default('k3snodes') }}"
   tasks:
     - lineinfile:
         path: /etc/sudoers

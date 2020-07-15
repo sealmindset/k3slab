@@ -1,7 +1,7 @@
 ---
 # Run: ansible-playbook -e { "pkgs": ["foo", "git"] } detect_tst.yml -u ubuntu -b
 #
-- hosts: "{{ localhost | default('k3snodes') }}"
+- hosts: "{{ var_hosts | default('k3snodes') }}"
   any_errors_fatal: false 
   tasks:
     - name: Installed Packages
