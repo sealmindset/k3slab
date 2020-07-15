@@ -1,6 +1,5 @@
----
-- hosts: "{{ localhost | default('k3snodes') }}"
-  any_errors_fatal: false 
+--
+- hosts: all 
   tasks:
     - lineinfile:
         path: /etc/netplan/50-cloud-init.yaml

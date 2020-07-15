@@ -1,0 +1,38 @@
+---
+- hosts: 10.0.1.111 
+  any_errors_fatal: false 
+  tasks:
+    - name: Install Docker 
+      apt:
+        name: docker.io  
+        state: latest 
+        update_cache: true
+
+    - name: Check if daemon.json already exists
+      stat: path=/etc/docker/daemon.json
+      register: stat_daemon_json
+
+    - name: Create daemon.json
+      copy:
+        dest: "/etc/docker/daemon.json"
+        content: |
+          {
+            "exec-opts": ["native.cgroupdriver=systemd"],
+            "log-driver": "json-file",
+            "log-opts": {
+              "max-size": "100m"
+            },
+            "storage-driver": "overlay2"
+          }
+      when: stat_daemon_json.stat.exists == false
+    
+    - name: Test for line
+      shell: "grep -c cgroup /boot/firmware/cmdline.txt"
+      register: cgroup_chk
+      failed_when: cgroup_chk.rc != 1 and cgroup_chk.rc != 0
+
+    - name: Tack to the end of line  
+      shell: sed -i '$ s/$/ cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 swapaccount=1/' /boot/firmware/cmdline.txt
+      when: cgroup_chk.stdout == "0" 
+      args:
+        warn: false

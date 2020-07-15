@@ -1,5 +1,5 @@
 ---
-- hosts: "{{ localhost | default('k3snodes') }}"
+- hosts: k3snodes
   any_errors_fatal: false 
   tasks:
     - name: Installed Packages

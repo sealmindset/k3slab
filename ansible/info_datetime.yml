@@ -1,6 +1,7 @@
 ---
-- hosts: "{{ localhost | default('k3snodes') }}"
-  any_errors_fatal: false 
+- name: Uses ansible_date_time
+  hosts: k3snodes
+
   tasks:
     - name: Ansible fact - ansible_date_time
       debug:

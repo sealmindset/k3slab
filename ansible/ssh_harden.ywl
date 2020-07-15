@@ -1,0 +1,14 @@
+---
+- hosts: "{{ localhost | default('k3snodes') }}"
+  any_errors_fatal: false 
+  gather_facts: false
+
+  tasks:
+
+    - name: Disable empty password
+      lineinfile:
+        state: present
+        dest: /etc/ssh/sshd_config
+        regexp: ^#?PermitEmptyPasswords
+        line: PermitEmptyPasswords no
+        validate: sshd -tf %s
