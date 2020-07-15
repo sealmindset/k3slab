@@ -1,8 +1,7 @@
 ---
 id_rsa_file: "/root/.ssh/id_rsa"
-passphrase: "changeit"
-root_password: "changeit"
+user_id: "change_userid"
+passphrase: "changeme"
+root_password: "changeme"
 nodes:
-  - 1.2.3.4
-  - 5.6.7.8
-  - 9.10.11.12
+  - 1.2.3.4 

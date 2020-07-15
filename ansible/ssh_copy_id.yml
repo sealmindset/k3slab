@@ -1,5 +1,5 @@
 ---
-- hosts: "{{ localhost | default('k3snodes') }}"
+- hosts: "{{ tgt_hosts | default('k3snodes') }}"
   any_errors_fatal: false 
   tasks:
     - stat:
