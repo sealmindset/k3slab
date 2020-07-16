@@ -1,5 +1,5 @@
 ---
-- hosts: k3snodes
+- hosts: 10.0.1.111 
   any_errors_fatal: false 
   tasks:
     - name: Install Docker 
