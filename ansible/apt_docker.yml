@@ -8,15 +8,17 @@
         state: present 
         update_cache: true
 
-    - name: Reboot
-      reboot:
+    - name: Reboot if required
+      command: shutdown -r now 'Rebooting...' 
+      args:
+        removes: /var/reboot-required
 
     - name: Add the packages.cloud.google.com apt key
       apt_key:
         url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
         state: present
     
-    - name: Install k8s dep repository
+    - name: Install k8s deb repository
       apt_repository:
         repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
         state: present
@@ -40,8 +42,10 @@
         - kubeadm 
         - kubectl
 
-    - name: Reboot
-      reboot:
+    - name: Reboot if required
+      command: shutdown -r now 'Rebooting...' 
+      args:
+        removes: /var/reboot-required
        
     - name: Check if daemon.json already exists
       stat: path=/etc/docker/daemon.json
@@ -72,8 +76,11 @@
       args:
         warn: false
     
-    - name: Reboot
-      reboot:
+    - name: Reboot if required
+      command: shutdown -r now 'Rebooting...' 
+      args:
+        removes: /var/reboot-required
+      when: cgroup_chk.stdout == "0" 
 
     - name: Check if k8s.conf already exists
       stat: path=/etc/sysctl.d/k8s.conf
@@ -90,5 +97,7 @@
     - name: Join Cluster
       shell: "kubeadm join 10.0.1.110:6443 --token 0bltg1.lmqqwtlrqh2hl7wb --discovery-token-ca-cert-hash sha256:c0150d94620c30c8d09600113d3847a194eb96b5fc264d771a63417dd1c21007"
       
-    - name: Reboot
-      reboot:
+    - name: Reboot if required
+      command: shutdown -r now 'Rebooting...' 
+      args:
+        removes: /var/reboot-required
