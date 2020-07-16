@@ -1,5 +1,5 @@
 ---
-- hosts: 10.0.1.111 
+- hosts: "{{ tgt_node | default('k3snodes') }}" 
   any_errors_fatal: false 
   tasks:
     - name: Install Docker 
@@ -75,29 +75,22 @@
       when: cgroup_chk.stdout == "0" 
       args:
         warn: false
+
+    - name: Remove swapfile from /etc/fstab
+      mount:
+        name: "{{ item }}"
+        fstype: swap
+        state: absent
+      with_items:
+        - swap
+        - none
+
+    - name: Disable swap
+      command: swapoff -a
+      when: ansible_swaptotal_mb > 0
     
     - name: Reboot if required
       command: shutdown -r now 'Rebooting...' 
       args:
         removes: /var/reboot-required
       when: cgroup_chk.stdout == "0" 
-
-    - name: Check if k8s.conf already exists
-      stat: path=/etc/sysctl.d/k8s.conf
-      register: stat_k8s_conf
-
-    - name: Create k8s.conf 
-      copy:
-        dest: "/etc/sysctl.d/k8s.conf"
-        content: |
-          net.bridge.bridge-nf-call-ip6tables = 1
-          net.bridge.bridge-nf-call-iptables = 1      
-      when: stat_k8s_conf.stat.exists == false
-
-    - name: Join Cluster
-      shell: "kubeadm join 10.0.1.110:6443 --token 0bltg1.lmqqwtlrqh2hl7wb --discovery-token-ca-cert-hash sha256:c0150d94620c30c8d09600113d3847a194eb96b5fc264d771a63417dd1c21007"
-      
-    - name: Reboot if required
-      command: shutdown -r now 'Rebooting...' 
-      args:
-        removes: /var/reboot-required

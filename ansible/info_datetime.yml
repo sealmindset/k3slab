@@ -1,6 +1,6 @@
 ---
 - name: Uses ansible_date_time
-  hosts: "{{ var_hosts | default('k3snodes') }}"
+  hosts: "{{ tgt_node | default('k3snodes') }}"
 
   tasks:
     - name: Ansible fact - ansible_date_time
