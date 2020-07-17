@@ -1,0 +1,14 @@
+---
+- name: Setup Passwordless SSH
+  hosts: 127.0.0.1 
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: Copy public key from Ansible Server into each node
+      command: 'sshpass -p "{{ user_password }}" ssh-copy-id -i "{{ id_rsa_file }}" "{{ user_id }}"@"{{ item }}" -f'
+      with_items:
+        - "{{ nodes }}"
+
+  vars_files:
+    - /home/ubuntu/ansible/config.yml

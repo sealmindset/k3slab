@@ -1,0 +1,20 @@
+---
+- name: Update cache 
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: apt upgrade
+    apt:
+      upgrade: dist
+- name: Update all packages to the latest version
+  apt:
+    upgrade: dist      
+
+- name: Remove useless packages from the cache
+  apt:
+    autoclean: yes
+
+- name: Remove dependencies that are no longer required
+  apt:
+    autoremove: yes

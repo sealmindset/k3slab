@@ -1,11 +1,7 @@
 ---
-- hosts: "{{ var_hosts | default('k3snodes') }}"
-  tasks:
-    - name: Get date time fact
-      debug: var=ansible_date_time.tz
+- name: Get date time fact
+    debug: var=ansible_date_time.tz
 
-    - name: Set timezone
-      timezone: name=America/Chicago
-      become: yes
-      tags:
-       - time
+- name: Set timezone
+    timezone: name=America/Chicago
+    become: yes
