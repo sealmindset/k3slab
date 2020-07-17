@@ -1,0 +1,32 @@
+---
+- hosts: "{{ tgt_node | default('k3snodes') }}"
+  gather_facts: false
+  any_errors_fatal: false 
+  tasks:
+    - name: Check Access to the Internet
+      command: nslookup dns9.quad9.net
+      register: stat_ns
+
+      # - debug: var=stat_ns
+
+    - name: Run the equivalent of "apt update" 
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+      when: stat_ns.rc == 0
+
+    - name: Install Tools
+      apt:
+        name: ['net-tools'] 
+        state: latest
+      when: stat_ns.rc == 0
+
+    - name: Remove useless packages from the cache
+      apt:
+        autoclean: yes
+
+    - name: Remove dependencies that are no longer required
+      apt:
+        autoremove: yes
+    
+    - include_tasks: /home/ubuntu/ansible/aptinstall.yml

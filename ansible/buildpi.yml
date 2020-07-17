@@ -1,0 +1,13 @@
+---
+- hosts: "{{ tgt_node | default('k3snodes') }}"
+  gather_facts: false
+  any_errors_fatal: false 
+  tasks:
+    - name: Update hostnames
+      hostname:
+        name: "{{ new_hostname }}"
+
+    - name: Reboot if required
+      command: shutdown -r now 'Rebooting...'
+      args:
+        removes: /var/reboot-required

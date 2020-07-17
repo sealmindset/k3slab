@@ -1,0 +1,16 @@
+  - name: "Gathering Packages Facts"
+    package_facts:
+      manager: "auto"
+
+  - name: Install net-tools
+    apt:
+      name: ['net-tools']
+      state: present
+      
+  - debug:
+      msg: "net-tools found"
+    when: "'net-tools' in ansible_facts.packages"
+
+  - debug:
+      msg: "net-tools NOT found"
+    when: "'net-tools' not in ansible_facts.packages"
