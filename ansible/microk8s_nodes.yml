@@ -1,0 +1,32 @@
+---
+- hosts: k3snodes
+  gather_facts: false
+  any_errors_fatal: false 
+
+  tasks:
+    - name: Check is ufw installed
+      shell: command -v ufw >/dev/null 2>&1
+      register: is_ufw_exist
+      ignore_errors: yes
+
+    - name: Disabling ufw
+      command: ufw disable
+      when: is_ufw_exist.rc == 0
+
+    - name: Check if the running kernel has been started with AppArmor enabled
+      set_fact:
+        apparmor__fact_apparmor_enabled_and_loaded: '{{
+          (apparmor__enabled|d() | bool) and
+          (ansible_cmdline.apparmor|d(0)|string == "1") and
+          (ansible_cmdline.security|d("none") == "apparmor") }}'
+      always_run: True
+
+    - name: Ensure AppArmor service is started
+      service:
+        name: 'apparmor'
+        state: 'started'
+        enabled: True
+      when: apparmor__fact_apparmor_enabled_and_loaded|bool      
+
+    - name: Disable Swap
+      command: swapoff -a

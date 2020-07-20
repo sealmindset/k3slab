@@ -3,15 +3,16 @@
   gather_facts: false
   any_errors_fatal: false 
   tasks:
-    - include_tasks: /home/ubuntu/ansible/set_sudoer.yml
-
-    - include_tasks: /home/ubuntu/ansible/set_pwdemp.yml
-
     - name: Update hostnames
       hostname:
         name: "{{ new_hostname }}"
 
     - include_tasks: /home/ubuntu/ansible/set_datetime.yml
+
+    - name: Install node-hash-sum
+      apt:
+        name: ['net-tools']
+        state: latest
 
     - name: Reboot if required
       command: shutdown -r now 'Rebooting...'
