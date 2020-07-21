@@ -1,7 +1,7 @@
 ---
 #
-- name: Store known hosts of 'all' the hosts in the inventory file
-  hosts: localhost
+- name: Setup Passwordless SSH 
+  hosts: "{{ tgt_node | default('localhost') }}" 
   connection: local
   any_errors_fatal: false 
   gather_facts: false
@@ -21,7 +21,7 @@
   vars:
     ssh_known_hosts_file: "{{ lookup('env','HOME') + '/.ssh/known_hosts' }}"
     ssh_public_key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
-    ssh_known_hosts: "{{ groups[groups_var] }}"
+    ssh_known_hosts: "{{ groups[groups_var] | default('all') }}"
 
   tasks:
   - name: For each host, scan for its ssh public key
@@ -39,7 +39,7 @@
     when: user_password is defined and user_id is defined and groups_var is defined
 
   - name: ssh-copy-id local public key
-    command: "sshpass -p '{{ user_password }}' ssh-copy-id -i /root/.ssh/id_rsa.pub '{{ user_id }}'@'{{ item }}' -o StrictHostKeyChecking=no"
+    command: "sshpass -p '{{ user_password }}' ssh-copy-id -i '/root/.ssh/id_rsa.pub' '{{ user_id }}'@'{{ item }}' -o StrictHostKeyChecking=no"
     with_items: "{{ ssh_known_hosts }}"
     ignore_errors: yes
     when: user_password is defined and user_id is defined and groups_var is defined
