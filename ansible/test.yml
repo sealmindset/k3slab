@@ -1,13 +1,14 @@
+---
+#
 - name: Store known hosts of 'all' the hosts in the inventory file
-  hosts: localhost
-  connection: local
-  any_errors_fatal: false
+  hosts: all 
+  #connection: local
+  #ignore_unreachable: true
+  any_errors_fatal: false 
   gather_facts: false
-  vars:
-    ssh_known_hosts: "{{ k3snodes }}" 
+  remote_user: ubuntu
 
   tasks:
-  - debug:
-      msg: "{{ item }} is alive"
-    when: hostsvars[item].ansible_host is defined
-    with_items: "{{ ssh_known_hosts }}"
+    - name: Test connection to instance
+      ping:
+
