@@ -20,7 +20,7 @@
 
   vars:
     ssh_known_hosts_file: "{{ lookup('env','HOME') + '/.ssh/known_hosts' }}"
-    ssh_public_key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+    #ssh_public_key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
     ssh_known_hosts: "{{ groups[groups_var] | default('all') }}"
 
   tasks:
@@ -39,6 +39,7 @@
     when: user_password is defined and user_id is defined and groups_var is defined
 
   - name: ssh-copy-id local public key
+    #  ssh-copy-id dash i tacts on a 2nd .pub to the string - file not found
     command: "sshpass -p '{{ user_password }}' ssh-copy-id -i '/root/.ssh/id_rsa.pub' '{{ user_id }}'@'{{ item }}' -o StrictHostKeyChecking=no"
     with_items: "{{ ssh_known_hosts }}"
     ignore_errors: yes
